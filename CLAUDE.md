@@ -170,3 +170,11 @@ These are parsed by `parseSentinels()` in `server/src/index.ts`. Format is rigid
 | preflight.md          | Changing preflight check logic              |
 | websocket.md          | Debugging streaming or reconnection         |
 | phase-detection.md    | Modifying phase advancement keyword logic   |
+
+## Current State
+
+- **Deploy URL:** https://moodlog-cgjawpkxua-uc.a.run.app
+- **GitHub Repo:** https://github.com/jephtta/moodlog
+- **E2E Tests:** 22 tests across 4 spec files (auth, calendar, mood-entry, smoke)
+- **Smoke Tests:** PASSING
+- **Build Status:** Clean (standalone output for Cloud Run)

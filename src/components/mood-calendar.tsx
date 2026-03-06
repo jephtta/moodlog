@@ -74,21 +74,27 @@ export function MoodCalendar({ entries, year, month, onMonthChange }: Props) {
           const mood = entry ? MOODS.find((m) => m.type === entry.mood) : null;
           const isToday = dateStr === todayStr;
 
+          const toggleTooltip = () => {
+            if (entry?.note) {
+              setTooltip(tooltip?.date === dateStr ? null : { date: dateStr, note: entry.note, mood: mood?.emoji || "" });
+            } else {
+              setTooltip(null);
+            }
+          };
+
           return (
             <div
               key={dateStr}
+              role={entry?.note ? "button" : undefined}
+              tabIndex={entry?.note ? 0 : undefined}
+              aria-label={entry?.note ? `${mood?.label || ""} on ${MONTH_NAMES[month]} ${day}: ${entry.note}` : undefined}
               className="relative flex flex-col items-center justify-center aspect-square rounded-lg cursor-default"
               style={{
                 border: isToday ? "2px solid #6366f1" : "1px solid transparent",
                 background: isToday ? "#6366f115" : "transparent",
               }}
-              onClick={() => {
-                if (entry?.note) {
-                  setTooltip(tooltip?.date === dateStr ? null : { date: dateStr, note: entry.note, mood: mood?.emoji || "" });
-                } else {
-                  setTooltip(null);
-                }
-              }}
+              onClick={toggleTooltip}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleTooltip(); } }}
             >
               <span className="text-xs text-gray-500">{day}</span>
               {mood && <span className="text-lg leading-none">{mood.emoji}</span>}

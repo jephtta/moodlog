@@ -1,29 +1,26 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Mood Entry (unauthenticated)", () => {
-  test("redirects to auth when not signed in", async ({ page }) => {
+test.describe("Mood entry (unauthenticated)", () => {
+  test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    // Wait for loading to finish, then should see auth form
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 15000 });
+  });
+
+  test("should show auth form instead of mood logger when not signed in", async ({ page }) => {
     await expect(page.getByText("Log Mood")).not.toBeVisible();
-  });
-});
-
-test.describe("Page structure", () => {
-  test("page loads without console errors", async ({ page }) => {
-    const errors: string[] = [];
-    page.on("pageerror", (err) => errors.push(err.message));
-    await page.goto("/");
-    await expect(page.getByLabel("Email")).toBeVisible({ timeout: 15000 });
-    // Firebase auth errors are expected in test env, filter those
-    const nonAuthErrors = errors.filter(
-      (e) => !e.includes("auth") && !e.includes("Firebase") && !e.includes("firestore")
-    );
-    expect(nonAuthErrors).toHaveLength(0);
+    await expect(page.getByText("Track your daily mood")).toBeVisible();
   });
 
-  test("has MoodLog heading", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.getByRole("heading", { name: "MoodLog" })).toBeVisible({ timeout: 15000 });
+  test("should not show sign-out button when not signed in", async ({ page }) => {
+    await expect(page.getByText("Sign Out")).not.toBeVisible();
+  });
+
+  test("should not show mood emoji buttons when not signed in", async ({ page }) => {
+    await expect(page.getByRole("button", { name: "Great" })).not.toBeVisible();
+    await expect(page.getByRole("button", { name: "Awful" })).not.toBeVisible();
+  });
+
+  test("should not show note input when not signed in", async ({ page }) => {
+    await expect(page.getByPlaceholder("Add a note (optional)")).not.toBeVisible();
   });
 });

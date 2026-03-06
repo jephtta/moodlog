@@ -68,7 +68,9 @@ export function MoodEntryForm({ todayEntry, onSaved }: Props) {
         ))}
       </div>
 
+      <label htmlFor="mood-note" className="sr-only">Note</label>
       <input
+        id="mood-note"
         type="text"
         maxLength={200}
         value={note}

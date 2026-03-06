@@ -21,9 +21,8 @@ export function AuthForm() {
       } else {
         await signIn(email, password);
       }
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
-      setError(message);
+    } catch {
+      setError(isSignUp ? "Could not create account. Please try again." : "Invalid email or password.");
     } finally {
       setLoading(false);
     }

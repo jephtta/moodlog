@@ -1,15 +1,32 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Calendar (UI structure)", () => {
-  test("auth form has all required elements", async ({ page }) => {
+test.describe("Auth form structure", () => {
+  test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("Track your daily mood")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByLabel("Email")).toBeVisible({ timeout: 15000 });
+  });
+
+  test("should show email placeholder text", async ({ page }) => {
     await expect(page.getByPlaceholder("you@example.com")).toBeVisible();
+  });
+
+  test("should show password placeholder text", async ({ page }) => {
     await expect(page.getByPlaceholder("At least 6 characters")).toBeVisible();
   });
 
-  test("sign up link is visible", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.getByText("Don't have an account?")).toBeVisible({ timeout: 15000 });
+  test("should show sign-up prompt for new users", async ({ page }) => {
+    await expect(page.getByText("Don't have an account?")).toBeVisible();
+  });
+
+  test("should require email field", async ({ page }) => {
+    await expect(page.getByLabel("Email")).toHaveAttribute("required", "");
+  });
+
+  test("should require password field", async ({ page }) => {
+    await expect(page.getByLabel("Password")).toHaveAttribute("required", "");
+  });
+
+  test("should enforce minimum password length", async ({ page }) => {
+    await expect(page.getByLabel("Password")).toHaveAttribute("minlength", "6");
   });
 });

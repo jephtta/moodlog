@@ -16,8 +16,12 @@ export function Dashboard() {
 
   const loadEntries = useCallback(async () => {
     if (!user) return;
-    const data = await getEntriesForMonth(user.uid, year, month);
-    setEntries(data);
+    try {
+      const data = await getEntriesForMonth(user.uid, year, month);
+      setEntries(data);
+    } catch (err) {
+      console.error("Failed to load mood entries:", err);
+    }
   }, [user, year, month]);
 
   useEffect(() => {
